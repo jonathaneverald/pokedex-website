@@ -43,11 +43,11 @@ const PokemonThumbnail = (props: {
   return (
     <div className={style}>
       <img
-        className="size-1/2 object-contain rounded-t-xl"
+        className="size-2/3 object-contain rounded-t-xl"
         src={props.image}
         alt={props.name}
       />
-      <div className="detail-wrapper px-4 py-3 w-72">
+      <div className="detail-wrapper px-4 py-3 w-72 font-serif">
         <span className="text-black-500 mr-3 uppercase text-xs font-bold">
           ID : #{props.id}
         </span>

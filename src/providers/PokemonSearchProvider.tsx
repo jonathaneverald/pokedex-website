@@ -6,6 +6,7 @@ import React, {
 } from "react";
 
 interface PokemonSearch {
+  id: number;
   name: string;
   type: string;
   image: string;
@@ -25,6 +26,7 @@ interface PokemonSearchContextInterface {
 export const PokemonSearchContext =
   createContext<PokemonSearchContextInterface>({
     pokemon: {
+      id: 0,
       name: "",
       type: "",
       image: "",
@@ -42,6 +44,7 @@ export const PokemonSearchProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [pokemon, setPokemon] = useState<PokemonSearch>({
+    id: 0,
     name: "",
     type: "",
     image: "",

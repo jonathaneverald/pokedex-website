@@ -20,6 +20,7 @@ const PokemonCardPage = () => {
 
     const data = await response.json();
     setPokemon({
+      id: data.id,
       name: data.name,
       type: data.types[0].type.name,
       image: data.sprites.other.dream_world.front_default,
@@ -42,6 +43,7 @@ const PokemonCardPage = () => {
       {!pokemonExist && <PokemonNotExist />}
       {pokemonExist && (
         <PokemonDetails
+          id={pokemon.id}
           name={pokemon.name}
           type={pokemon.type}
           image={pokemon.image}

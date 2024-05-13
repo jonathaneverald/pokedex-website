@@ -1,7 +1,9 @@
-import React from "react";
+import { log } from "console";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const PokemonDetails = (props: {
+  id: number;
   name: string;
   type: string;
   image: string;
@@ -12,13 +14,39 @@ export const PokemonDetails = (props: {
   special_atk: string;
   special_def: string;
 }) => {
+  const [currentPokemonId, setCurrentPokemonId] = useState<number>(props.id);
+  console.log(currentPokemonId, "ini line 18");
+  console.log(props.id, "ini line 19");
+
   const navigate = useNavigate();
+
   const onClick = () => {
     localStorage.clear();
     navigate("/");
-    // setTimeout(() => {
-    // }, 500);
   };
+
+  const handleNext = () => {
+    setCurrentPokemonId(currentPokemonId + 1);
+  };
+
+  const handlePrevious = () => {
+    setCurrentPokemonId(currentPokemonId - 1);
+  };
+
+  useEffect(() => {
+    const fetchPokemon = async () => {
+      const url = "https://pokeapi.co/api/v2/pokemon/" + currentPokemonId;
+      console.log(url, "ini url");
+
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Failed to search Pokemon");
+      const data = await response.json();
+      const pokemonName = data.name;
+      localStorage.setItem("pokemon", pokemonName);
+    };
+    fetchPokemon();
+  }, [currentPokemonId]);
+
   const colors: { [key: string]: string } = {
     normal: "bg-normal",
     fire: "bg-fire",
@@ -39,6 +67,7 @@ export const PokemonDetails = (props: {
     steel: "bg-steel",
     fairy: "bg-fairy",
   };
+
   const style = `max-w-screen-100 mx-auto py-8 px-4 lg:py-16 lg:px-6 ${
     colors[props.type]
   }`;
@@ -111,10 +140,22 @@ export const PokemonDetails = (props: {
           </div>
         </div>
         <button
+          onClick={handlePrevious}
+          className="text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm m-2 px-5 py-2.5 text-center"
+        >
+          Previous
+        </button>
+        <button
           onClick={onClick}
           className="text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm m-2 px-5 py-2.5 text-center"
         >
-          Back
+          Back to Home
+        </button>
+        <button
+          onClick={handleNext}
+          className="text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm m-2 px-5 py-2.5 text-center"
+        >
+          Next
         </button>
       </div>
     </>

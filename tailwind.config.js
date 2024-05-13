@@ -3,6 +3,9 @@ module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        pokefont: ["Pokefont", "sans-serif"],
+      },
       colors: {
         "pokemon-blue": "#5db9ff",
         normal: "#A8A77A",
