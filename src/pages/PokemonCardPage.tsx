@@ -6,7 +6,7 @@ import { PokemonNotExist } from "../components/PokemonNotExist";
 
 const PokemonCardPage = () => {
   const { pokemon, setPokemon } = useContext(PokemonSearchContext);
-  const [pokemonExist, setPokemonExist] = useState<boolean>(true);
+  const [pokemonExist, setPokemonExist] = useState<boolean>(false);
 
   const searchPokemon = async () => {
     const pokemonName = localStorage.getItem("pokemon");
@@ -31,6 +31,7 @@ const PokemonCardPage = () => {
       special_atk: data.stats[3].base_stat,
       special_def: data.stats[4].base_stat,
     });
+    setPokemonExist(true);
   };
 
   useEffect(() => {

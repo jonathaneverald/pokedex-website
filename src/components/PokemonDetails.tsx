@@ -1,6 +1,6 @@
-import { log } from "console";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { PokemonSearchContext } from "../providers/PokemonSearchProvider";
 
 export const PokemonDetails = (props: {
   id: number;
@@ -14,10 +14,8 @@ export const PokemonDetails = (props: {
   special_atk: string;
   special_def: string;
 }) => {
+  const { pokemon, setPokemon } = useContext(PokemonSearchContext);
   const [currentPokemonId, setCurrentPokemonId] = useState<number>(props.id);
-  console.log(currentPokemonId, "ini line 18");
-  console.log(props.id, "ini line 19");
-
   const navigate = useNavigate();
 
   const onClick = () => {
@@ -36,11 +34,22 @@ export const PokemonDetails = (props: {
   useEffect(() => {
     const fetchPokemon = async () => {
       const url = "https://pokeapi.co/api/v2/pokemon/" + currentPokemonId;
-      console.log(url, "ini url");
-
       const response = await fetch(url);
+
       if (!response.ok) throw new Error("Failed to search Pokemon");
       const data = await response.json();
+      setPokemon({
+        id: data.id,
+        name: data.name,
+        type: data.types[0].type.name,
+        image: data.sprites.other.dream_world.front_default,
+        hp: data.stats[0].base_stat,
+        attack: data.stats[1].base_stat,
+        defense: data.stats[2].base_stat,
+        speed: data.stats[5].base_stat,
+        special_atk: data.stats[3].base_stat,
+        special_def: data.stats[4].base_stat,
+      });
       const pokemonName = data.name;
       localStorage.setItem("pokemon", pokemonName);
     };
@@ -77,10 +86,10 @@ export const PokemonDetails = (props: {
       <div className={style}>
         <div className="text-center mb-10">
           <h2 className="text-4xl tracking-tight font-bold text-primary-800 capitalize">
-            {props.name}
+            {pokemon.name}
           </h2>
           <h3 className="text-xl tracking-tight font-bold text-primary-800 capitalize">
-            {props.type}
+            {pokemon.type}
           </h3>
         </div>
 
@@ -88,7 +97,7 @@ export const PokemonDetails = (props: {
           <div className="mr-0 md:mr-8 mb-6 md:mb-0 flex items-center">
             <img
               className="w-1/2 md:w-full mx-auto size-1/2 object-contain"
-              src={props.image}
+              src={pokemon.image}
               alt="Pokemon Pict"
             />
           </div>
@@ -96,20 +105,20 @@ export const PokemonDetails = (props: {
             <div className="w-full sm:w-1/2 mb-4 px-2 ">
               <div className="h-full py-4 px-6 border-2 border-slate-950 rounded-xl">
                 <h3 className="text-2xl font-bold text-md mb-6">HP</h3>
-                <p className="text-2xl font-bold">{props.hp}</p>
+                <p className="text-2xl font-bold">{pokemon.hp}</p>
               </div>
             </div>
             <div className="w-full sm:w-1/2 mb-4 px-2 ">
               <div className="h-full py-4 px-6 border-2 border-slate-950 rounded-xl">
                 <h3 className="text-2xl font-bold text-md mb-6">Speed</h3>
-                <p className="text-2xl font-bold">{props.speed}</p>
+                <p className="text-2xl font-bold">{pokemon.speed}</p>
               </div>
             </div>
 
             <div className="w-full sm:w-1/2 mb-4 px-2 ">
               <div className="h-full py-4 px-6 border-2 border-slate-950 rounded-xl">
                 <h3 className="text-2xl font-bold text-md mb-6">Attack</h3>
-                <p className="text-2xl font-bold">{props.attack}</p>
+                <p className="text-2xl font-bold">{pokemon.attack}</p>
               </div>
             </div>
 
@@ -118,14 +127,14 @@ export const PokemonDetails = (props: {
                 <h3 className="text-2xl font-bold text-md mb-6">
                   Special Attack
                 </h3>
-                <p className="text-2xl font-bold">{props.special_atk}</p>
+                <p className="text-2xl font-bold">{pokemon.special_atk}</p>
               </div>
             </div>
 
             <div className="w-full sm:w-1/2 mb-4 px-2 ">
               <div className="h-full py-4 px-6 border-2 border-slate-950 rounded-xl">
                 <h3 className="text-2xl font-bold text-md mb-6">Defense</h3>
-                <p className="text-2xl font-bold">{props.defense}</p>
+                <p className="text-2xl font-bold">{pokemon.defense}</p>
               </div>
             </div>
 
@@ -134,7 +143,7 @@ export const PokemonDetails = (props: {
                 <h3 className="text-2xl font-bold text-md mb-6">
                   Special Defense
                 </h3>
-                <p className="text-2xl font-bold">{props.special_def}</p>
+                <p className="text-2xl font-bold">{pokemon.special_def}</p>
               </div>
             </div>
           </div>
